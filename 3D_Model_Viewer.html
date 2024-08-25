@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Model Viewer</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    #error {
+      background-color: #ffffffdd;
+      border-radius: 16px;
+      padding: 16px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      transition: opacity 0.3s;
+    }
+    #error.hide {
+      opacity: 0;
+      visibility: hidden;
+      transition: visibility 2s, opacity 1s 1s;
+    }
+  </style>
+</head>
+<body>
+  <model-viewer id="model-viewer" src="https://github.com/zigmasketch/zigmasketch/raw/main/Washin%20Machine.glb"
+    ar ar-modes="scene-viewer quick-look" camera-controls touch-action="pan-y" alt="A 3D model of a washing machine"
+    shadow-intensity="2" auto-rotate disable-pan
+    skybox-image="" skybox-height="2m" max-camera-orbit="auto 90deg auto">
+    <div id="error" class="hide">AR is not supported on this device</div>
+  </model-viewer>
+
+  <script>
+    document.querySelector("#model-viewer").addEventListener('ar-status', (event) => {
+      if (event.detail.status === 'failed') {
+        const error = document.querySelector("#error");
+        error.classList.remove('hide');
+        error.addEventListener('transitionend', (event) => {
+          error.classList.add('hide');
+        });
+      }
+    });
+  </script>
+</body>
+</html>
